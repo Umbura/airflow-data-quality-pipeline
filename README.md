@@ -1,106 +1,174 @@
 # Airflow Data Quality Pipeline
 
-Backend-first data engineering portfolio project using a real retail transactions dataset, an Airflow-ready DAG, DuckDB analytical marts, data quality gates, and a FastAPI results API.
+Backend data pipeline for retail transaction ingestion, data quality validation, analytical mart generation, and read-only result serving.
 
-The goal is to show a reproducible data pipeline rather than a dashboard-only project.
+The project normalizes a real public retail dataset, validates critical constraints before transformation, builds DuckDB analytical outputs, and exposes pipeline results through a FastAPI service. Airflow orchestration is represented by a DAG that calls the same pipeline code used by local execution and tests.
 
-## What This Project Demonstrates
+## Overview
 
-- Python packaging with `pyproject.toml` and `uv`.
-- Raw data normalization from a real public dataset.
-- Critical data quality checks before transformation.
-- DuckDB warehouse and analytical marts.
-- Airflow DAG definition using the same pipeline code.
-- FastAPI read-only API for downstream consumption.
-- Automated tests and linting.
-- GitHub-ready documentation and partial generated results.
+The system separates dataset preparation, raw table loading, data quality validation, warehouse transformation, result reporting, and API access. The pipeline can be executed locally without starting Airflow, while the DAG remains available for orchestration in an Airflow runtime.
 
-## Dataset
+The default execution path does not require paid services, external databases, or cloud infrastructure.
 
-This project uses a normalized sample derived from the **UCI Online Retail** dataset.
+## Implemented Scope
 
-- Source: [UCI Online Retail](https://archive.ics.uci.edu/dataset/352/online%2Bretail)
-- Citation: `Chen, D. (2015). Online Retail [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33`
-- License: CC BY 4.0
-- CSV mirror used for reproducible download: [Databricks Spark The Definitive Guide retail CSV](https://raw.githubusercontent.com/databricks/Spark-The-Definitive-Guide/master/data/retail-data/all/online-retail-dataset.csv)
+- UCI Online Retail sample preparation from a reproducible CSV mirror.
+- Normalized raw tables for customers, orders, and order items.
+- Critical data quality gates before warehouse generation.
+- DuckDB warehouse build.
+- Analytical marts for daily revenue, customer revenue, product revenue, and country revenue.
+- JSON reports for dataset preparation, quality validation, and pipeline run summary.
+- FastAPI service exposing health, metrics, quality, and mart endpoints.
+- Airflow DAG definition using the same pipeline function.
+- Unit tests for quality checks and pipeline execution.
+- Ruff lint configuration.
 
-See [DATA_LICENSE.md](DATA_LICENSE.md) for attribution details.
-
-## Architecture
+## Execution Flow
 
 ```text
 UCI Online Retail CSV
-    -> normalized raw tables
-       - customers.csv
-       - orders.csv
-       - order_items.csv
-    -> data quality gates
-    -> DuckDB warehouse
-    -> analytical marts
-       - daily_revenue.csv
-       - customer_revenue.csv
-       - product_revenue.csv
-       - country_revenue.csv
-    -> JSON reports
-    -> FastAPI read-only API
+  -> retail-prepare-uci
+      -> normalized raw CSV tables
+          -> customers.csv
+          -> orders.csv
+          -> order_items.csv
+      -> dataset preparation report
+  -> retail-pipeline
+      -> raw frame loading
+      -> quality gates
+      -> DuckDB warehouse
+      -> analytical marts
+      -> quality and run reports
+  -> retail-api
+      -> read-only access to generated outputs
 ```
 
-Airflow orchestration is defined in `dags/retail_data_quality_pipeline.py`. For this first portfolio version, the same logic can be run locally without starting Airflow.
+## Dataset
 
-## Tech Stack
+The sample data is derived from the UCI Machine Learning Repository Online Retail dataset.
 
-- Python 3.11+
-- uv
-- Pandas
-- DuckDB
-- FastAPI
-- Pytest
-- Ruff
-- Airflow DAG definition
+- Source dataset: https://archive.ics.uci.edu/dataset/352/online%2Bretail
+- Citation: `Chen, D. (2015). Online Retail [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33`
+- License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+- CSV mirror used for reproducible preparation: https://raw.githubusercontent.com/databricks/Spark-The-Definitive-Guide/master/data/retail-data/all/online-retail-dataset.csv
 
-## Quickstart
+Attribution details are documented in `DATA_LICENSE.md`.
+
+## Data Quality Model
+
+The pipeline blocks warehouse generation when critical quality checks fail.
+
+Implemented checks:
+
+- required raw columns;
+- non-null required fields;
+- unique customer and order keys;
+- accepted order status values;
+- accepted customer segment values;
+- positive quantity and unit price;
+- order-to-customer referential integrity;
+- order-item-to-order referential integrity.
+
+The quality gate is intentionally strict. Failed critical checks raise an exception before marts are generated.
+
+## API
+
+Start the local API:
 
 ```bash
 uv sync --extra dev
-uv run retail-prepare-uci --max-rows 50000
 uv run retail-pipeline
-uv run pytest
 uv run retail-api
 ```
 
-Use `--max-rows 0` to process the full mirrored CSV.
+Open:
 
-## API Endpoints
+```text
+http://127.0.0.1:8000/docs
+```
 
-After `uv run retail-api`, open:
+Endpoints:
 
-- `http://127.0.0.1:8000/health`
-- `http://127.0.0.1:8000/metrics`
-- `http://127.0.0.1:8000/quality`
-- `http://127.0.0.1:8000/marts/daily-revenue`
-- `http://127.0.0.1:8000/marts/customer-revenue`
-- `http://127.0.0.1:8000/marts/product-revenue`
-- `http://127.0.0.1:8000/marts/country-revenue`
+- `GET /health`
+- `GET /metrics`
+- `GET /quality`
+- `GET /marts/daily-revenue`
+- `GET /marts/customer-revenue`
+- `GET /marts/product-revenue`
+- `GET /marts/country-revenue`
 
-## Current Partial Results
+## Airflow
 
-The included sample run uses the first 50,000 source rows from the Online Retail dataset.
+The DAG is defined in:
 
-Preparation summary:
+```text
+dags/retail_data_quality_pipeline.py
+```
 
-- 50,000 source rows read.
-- 32,114 normalized transaction rows.
-- 17,886 rows dropped during cleaning, mostly missing customer IDs.
-- 1,039 customers.
-- 1,979 orders.
-- 32,114 order items.
+The DAG calls `retail_pipeline.pipeline.run_pipeline()`, the same function used by local execution and tests.
 
-Pipeline summary:
+Install Airflow only when an Airflow runtime is required:
 
-- 14 data quality checks.
-- 14 passed.
-- 0 failed.
-- 4 analytical marts generated.
+```bash
+uv sync --extra airflow
+```
+
+The validated local path does not require Airflow installation.
+
+## Local Commands
+
+Install dependencies:
+
+```bash
+uv sync --extra dev
+```
+
+Prepare a 50,000-row sample:
+
+```bash
+uv run retail-prepare-uci --max-rows 50000
+```
+
+Process the full mirrored CSV:
+
+```bash
+uv run retail-prepare-uci --max-rows 0
+```
+
+Run the pipeline:
+
+```bash
+uv run retail-pipeline
+```
+
+Run tests and lint:
+
+```bash
+uv run pytest -q
+uv run ruff check .
+```
+
+Start the API:
+
+```bash
+uv run retail-api
+```
+
+## Current Results
+
+Latest generated sample:
+
+| Metric | Result |
+| --- | ---: |
+| Source rows read | 50,000 |
+| Normalized transaction rows | 32,114 |
+| Dropped rows during preparation | 17,886 |
+| Customers | 1,039 |
+| Orders | 1,979 |
+| Order items | 32,114 |
+| Data quality checks | 14 |
+| Failed quality checks | 0 |
+| Analytical marts | 4 |
 
 Generated artifacts:
 
@@ -112,52 +180,76 @@ Generated artifacts:
 - `data/processed/marts/product_revenue.csv`
 - `data/processed/marts/country_revenue.csv`
 
-See [docs/results_snapshot.md](docs/results_snapshot.md) for a concise result snapshot.
+A concise output summary is available in `docs/results_snapshot.md`.
 
-## Data Quality Gates
+## Validation Results
 
-The pipeline blocks critical issues before building marts:
+Latest validation:
 
-- missing required columns;
-- null required fields;
-- duplicated customer or order keys;
-- invalid order status;
-- invalid customer segment;
-- non-positive quantity or price;
-- orphan orders without customer;
-- orphan order items without order.
+| Check | Result |
+| --- | ---: |
+| Dataset preparation | passed |
+| Pipeline execution | passed |
+| Unit tests | 3 passed |
+| Lint | passed |
 
-## Airflow
+The validation path uses local execution and does not require Airflow, cloud credentials, or paid APIs.
 
-The DAG is in:
+## Repository Layout
 
 ```text
-dags/retail_data_quality_pipeline.py
+dags/                   Airflow DAG definition
+data/external/          ignored external downloads
+data/raw/               normalized raw CSV tables
+data/processed/marts/   generated analytical marts
+docs/                   result snapshots and supporting notes
+reports/                generated JSON reports
+src/retail_pipeline/    pipeline, quality checks, warehouse, API, dataset preparation
+tests/                  unit tests and pipeline tests
 ```
 
-To run with Airflow later, install the optional dependency and point Airflow to the `dags` folder:
+## Roadmap
 
-```bash
-uv sync --extra airflow
-```
+### Phase 1: Backend Pipeline MVP
 
-The full Airflow runtime is optional for this first version because it is heavier than the backend proof of value. The DAG calls `retail_pipeline.pipeline.run_pipeline()`, the same function used by local execution and tests.
+Status: implemented.
 
-## Validation
+- Dataset preparation command.
+- Raw table normalization.
+- Data quality gate.
+- DuckDB warehouse generation.
+- Analytical marts.
+- JSON reports.
+- FastAPI read-only API.
+- Tests and linting.
 
-Latest local validation:
+### Phase 2: Airflow Runtime Validation
 
-```text
-uv run retail-prepare-uci --max-rows 50000 -> success
-uv run retail-pipeline -> success
-uv run pytest -> 3 passed
-uv run ruff check . -> All checks passed
-```
+- Run the DAG in a local Airflow instance.
+- Document DAG execution output.
+- Add screenshots or logs from the Airflow UI.
 
-## Portfolio Talking Point
+### Phase 3: Data Engineering Extensions
 
-> Built an Airflow-ready retail data pipeline using a real public transaction dataset, with normalization, quality gates, DuckDB analytical marts, JSON run reports and a FastAPI API for downstream consumption. The pipeline validates raw inputs, blocks critical data issues and produces reproducible outputs with automated tests.
+- Add dbt models for transformation lineage.
+- Add Great Expectations or equivalent expectation suites.
+- Add CI validation for tests and lint.
+- Add Docker Compose for reproducible local services.
 
-## License and Code Reuse
+### Phase 4: Production Hardening
 
-This repository uses original implementation code. External repositories and datasets were used only as references or public data sources with attribution; no third-party source code was copied into this project.
+- Replace local DuckDB artifact with a managed warehouse target.
+- Add incremental loading.
+- Add API authentication for exposed environments.
+- Add structured pipeline observability.
+
+## References
+
+- UCI Online Retail dataset: https://archive.ics.uci.edu/dataset/352/online%2Bretail
+- Dataset DOI: https://doi.org/10.24432/C5BW33
+- Databricks CSV mirror: https://raw.githubusercontent.com/databricks/Spark-The-Definitive-Guide/master/data/retail-data/all/online-retail-dataset.csv
+- Apache Airflow: https://airflow.apache.org/
+- DuckDB: https://duckdb.org/
+- FastAPI: https://fastapi.tiangolo.com/
+
+License and dataset attribution are documented in `LICENSE` and `DATA_LICENSE.md`.
