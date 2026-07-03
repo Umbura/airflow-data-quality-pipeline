@@ -1,0 +1,24 @@
+country,segment,customers,orders,gross_revenue
+United Kingdom,domestic,950,1813,594869.96
+Germany,export,24,50,19217.27
+France,export,19,34,12985.6
+EIRE,export,3,20,8813.88
+Netherlands,export,2,3,8784.48
+Australia,export,4,6,8187.23
+Japan,export,3,4,7705.07
+Sweden,export,2,5,4381.86
+Norway,export,1,2,3787.12
+Spain,export,6,6,2982.4
+Portugal,export,6,10,2853.65
+Cyprus,export,1,2,1868.02
+Belgium,export,4,7,1809.91
+Lithuania,export,1,4,1661.06
+Switzerland,export,2,2,1304.92
+Denmark,export,1,1,1281.5
+Finland,export,1,1,892.8
+Italy,export,4,4,811.5
+Iceland,export,1,1,711.79
+Channel Islands,export,1,1,363.53
+Poland,export,1,1,248.16
+Austria,export,1,1,0.0
+Israel,export,1,1,0.0

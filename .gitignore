@@ -1,0 +1,14 @@
+.venv/
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+*.py[cod]
+*.duckdb
+*.duckdb.wal
+.env
+.env.*
+!.env.example
+airflow_home/
+logs/
+data/external/*
+!data/external/.gitkeep

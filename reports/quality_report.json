@@ -1,0 +1,156 @@
+{
+  "total_checks": 14,
+  "passed_checks": 14,
+  "failed_checks": 0,
+  "checks": [
+    {
+      "name": "customers.required_columns",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "missing_columns": []
+      }
+    },
+    {
+      "name": "orders.required_columns",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "missing_columns": []
+      }
+    },
+    {
+      "name": "order_items.required_columns",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "missing_columns": []
+      }
+    },
+    {
+      "name": "customers.not_null",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "columns": [
+          "customer_id",
+          "country",
+          "segment"
+        ]
+      }
+    },
+    {
+      "name": "orders.not_null",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "columns": [
+          "order_id",
+          "customer_id",
+          "order_date",
+          "status"
+        ]
+      }
+    },
+    {
+      "name": "order_items.not_null",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "columns": [
+          "order_id",
+          "product_id",
+          "description",
+          "quantity",
+          "unit_price"
+        ]
+      }
+    },
+    {
+      "name": "customers.customer_id.unique",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "column": "customer_id"
+      }
+    },
+    {
+      "name": "orders.order_id.unique",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "column": "order_id"
+      }
+    },
+    {
+      "name": "orders.status.accepted_values",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "accepted_values": [
+          "canceled",
+          "paid"
+        ],
+        "invalid_values": []
+      }
+    },
+    {
+      "name": "customers.segment.accepted_values",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "accepted_values": [
+          "domestic",
+          "export"
+        ],
+        "invalid_values": []
+      }
+    },
+    {
+      "name": "order_items.quantity.positive",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "column": "quantity"
+      }
+    },
+    {
+      "name": "order_items.unit_price.positive",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "column": "unit_price"
+      }
+    },
+    {
+      "name": "orders.customer_id.fk_customers.customer_id",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "missing_values": []
+      }
+    },
+    {
+      "name": "order_items.order_id.fk_orders.order_id",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "missing_values": []
+      }
+    }
+  ]
+}
