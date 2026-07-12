@@ -1,14 +1,18 @@
 {
-  "run_id": "20260703T213710Z",
+  "run_id": "20260712T201300134773Z",
   "status": "success",
+  "started_at": "2026-07-12T20:13:00.134Z",
+  "finished_at": "2026-07-12T20:13:00.790Z",
+  "duration_seconds": 0.657,
+  "failed_stage": null,
   "raw_rows": {
     "customers": 1039,
     "orders": 1979,
     "order_items": 32114
   },
   "quality": {
-    "total_checks": 14,
-    "passed_checks": 14,
+    "total_checks": 22,
+    "passed_checks": 22,
     "failed_checks": 0
   },
   "marts": {
@@ -16,7 +20,9 @@
       "rows": 25,
       "columns": [
         "order_date",
-        "orders",
+        "total_orders",
+        "paid_orders",
+        "canceled_orders",
         "gross_revenue",
         "avg_order_value"
       ]
@@ -27,9 +33,11 @@
         "customer_id",
         "country",
         "segment",
-        "orders",
+        "total_orders",
+        "paid_orders",
+        "canceled_orders",
         "gross_revenue",
-        "last_order_date"
+        "last_paid_order_date"
       ]
     },
     "product_revenue": {
@@ -38,6 +46,7 @@
         "product_id",
         "description",
         "units_sold",
+        "units_canceled",
         "gross_revenue"
       ]
     },
@@ -47,17 +56,20 @@
         "country",
         "segment",
         "customers",
-        "orders",
+        "total_orders",
+        "paid_orders",
+        "canceled_orders",
         "gross_revenue"
       ]
     }
   },
   "outputs": {
-    "warehouse": "C:\\Users\\iago\\Documents\\Emprego\\airflow-data-quality-pipeline\\data\\processed\\warehouse.duckdb",
-    "quality_report": "C:\\Users\\iago\\Documents\\Emprego\\airflow-data-quality-pipeline\\reports\\quality_report.json",
-    "daily_revenue": "C:\\Users\\iago\\Documents\\Emprego\\airflow-data-quality-pipeline\\data\\processed\\marts\\daily_revenue.csv",
-    "customer_revenue": "C:\\Users\\iago\\Documents\\Emprego\\airflow-data-quality-pipeline\\data\\processed\\marts\\customer_revenue.csv",
-    "product_revenue": "C:\\Users\\iago\\Documents\\Emprego\\airflow-data-quality-pipeline\\data\\processed\\marts\\product_revenue.csv",
-    "country_revenue": "C:\\Users\\iago\\Documents\\Emprego\\airflow-data-quality-pipeline\\data\\processed\\marts\\country_revenue.csv"
-  }
+    "quality_report": "reports/quality_report.json",
+    "warehouse": "data/processed/warehouse.duckdb",
+    "daily_revenue": "data/processed/marts/daily_revenue.csv",
+    "customer_revenue": "data/processed/marts/customer_revenue.csv",
+    "product_revenue": "data/processed/marts/product_revenue.csv",
+    "country_revenue": "data/processed/marts/country_revenue.csv"
+  },
+  "error": null
 }

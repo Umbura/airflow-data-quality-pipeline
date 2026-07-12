@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+import json
+import os
 from pathlib import Path
+from typing import Any
+from uuid import uuid4
 
 import pandas as pd
 
@@ -21,6 +25,28 @@ def load_raw_frames(raw_dir: Path) -> dict[str, pd.DataFrame]:
     return frames
 
 
-def write_json(path: Path, payload: str) -> None:
+def _temporary_path(path: Path) -> Path:
+    return path.with_name(f".{path.name}.{uuid4().hex}.tmp")
+
+
+def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(payload, encoding="utf-8")
+    temporary_path = _temporary_path(path)
+    try:
+        temporary_path.write_text(
+            json.dumps(payload, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+        os.replace(temporary_path, path)
+    finally:
+        temporary_path.unlink(missing_ok=True)
+
+
+def write_csv(path: Path, frame: pd.DataFrame) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path = _temporary_path(path)
+    try:
+        frame.to_csv(temporary_path, index=False)
+        os.replace(temporary_path, path)
+    finally:
+        temporary_path.unlink(missing_ok=True)

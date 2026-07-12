@@ -1,0 +1,24 @@
+{
+  "validated_at": "2026-07-12T20:13:00Z",
+  "airflow_version": "2.11.2",
+  "python_version": "3.12",
+  "dag_id": "retail_data_quality_pipeline",
+  "logical_execution_date": "2026-07-12",
+  "status": "success",
+  "tasks": {
+    "validate_quality": "success",
+    "build_analytics": "success",
+    "publish_results": "success"
+  },
+  "raw_rows": {
+    "customers": 1039,
+    "orders": 1979,
+    "order_items": 32114
+  },
+  "quality": {
+    "total_checks": 22,
+    "passed_checks": 22,
+    "failed_checks": 0
+  },
+  "analytical_marts": 4
+}

@@ -1,8 +1,37 @@
 {
-  "total_checks": 14,
-  "passed_checks": 14,
+  "status": "passed",
+  "total_checks": 22,
+  "passed_checks": 22,
   "failed_checks": 0,
+  "critical_failures": [],
   "checks": [
+    {
+      "name": "customers.table_present",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "table": "customers"
+      }
+    },
+    {
+      "name": "orders.table_present",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "table": "orders"
+      }
+    },
+    {
+      "name": "order_items.table_present",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "table": "order_items"
+      }
+    },
     {
       "name": "customers.required_columns",
       "passed": true,
@@ -10,6 +39,15 @@
       "failed_rows": 0,
       "details": {
         "missing_columns": []
+      }
+    },
+    {
+      "name": "customers.not_empty",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "rows": 1039
       }
     },
     {
@@ -22,12 +60,30 @@
       }
     },
     {
+      "name": "orders.not_empty",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "rows": 1979
+      }
+    },
+    {
       "name": "order_items.required_columns",
       "passed": true,
       "severity": "critical",
       "failed_rows": 0,
       "details": {
         "missing_columns": []
+      }
+    },
+    {
+      "name": "order_items.not_empty",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "rows": 32114
       }
     },
     {
@@ -44,6 +100,39 @@
       }
     },
     {
+      "name": "customers.customer_id.unique",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "column": "customer_id"
+      }
+    },
+    {
+      "name": "customers.segment.accepted_values",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "accepted_values": [
+          "domestic",
+          "export"
+        ],
+        "invalid_values": [],
+        "null_rows": 0
+      }
+    },
+    {
+      "name": "customers.first_invoice_date.parseable_date",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "column": "first_invoice_date",
+        "invalid_values": []
+      }
+    },
+    {
       "name": "orders.not_null",
       "passed": true,
       "severity": "critical",
@@ -55,30 +144,6 @@
           "order_date",
           "status"
         ]
-      }
-    },
-    {
-      "name": "order_items.not_null",
-      "passed": true,
-      "severity": "critical",
-      "failed_rows": 0,
-      "details": {
-        "columns": [
-          "order_id",
-          "product_id",
-          "description",
-          "quantity",
-          "unit_price"
-        ]
-      }
-    },
-    {
-      "name": "customers.customer_id.unique",
-      "passed": true,
-      "severity": "critical",
-      "failed_rows": 0,
-      "details": {
-        "column": "customer_id"
       }
     },
     {
@@ -100,20 +165,33 @@
           "canceled",
           "paid"
         ],
-        "invalid_values": []
+        "invalid_values": [],
+        "null_rows": 0
       }
     },
     {
-      "name": "customers.segment.accepted_values",
+      "name": "orders.order_date.parseable_date",
       "passed": true,
       "severity": "critical",
       "failed_rows": 0,
       "details": {
-        "accepted_values": [
-          "domestic",
-          "export"
-        ],
+        "column": "order_date",
         "invalid_values": []
+      }
+    },
+    {
+      "name": "order_items.not_null",
+      "passed": true,
+      "severity": "critical",
+      "failed_rows": 0,
+      "details": {
+        "columns": [
+          "description",
+          "order_id",
+          "product_id",
+          "quantity",
+          "unit_price"
+        ]
       }
     },
     {
@@ -122,7 +200,8 @@
       "severity": "critical",
       "failed_rows": 0,
       "details": {
-        "column": "quantity"
+        "column": "quantity",
+        "invalid_values": []
       }
     },
     {
@@ -131,7 +210,8 @@
       "severity": "critical",
       "failed_rows": 0,
       "details": {
-        "column": "unit_price"
+        "column": "unit_price",
+        "invalid_values": []
       }
     },
     {
@@ -140,7 +220,8 @@
       "severity": "critical",
       "failed_rows": 0,
       "details": {
-        "missing_values": []
+        "missing_values": [],
+        "null_rows": 0
       }
     },
     {
@@ -149,8 +230,16 @@
       "severity": "critical",
       "failed_rows": 0,
       "details": {
-        "missing_values": []
+        "missing_values": [],
+        "null_rows": 0
       }
     }
-  ]
+  ],
+  "run_id": "20260712T201300134773Z",
+  "generated_at": "2026-07-12T20:13:00.208Z",
+  "raw_rows": {
+    "customers": 1039,
+    "orders": 1979,
+    "order_items": 32114
+  }
 }

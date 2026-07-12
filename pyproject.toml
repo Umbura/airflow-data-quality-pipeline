@@ -1,6 +1,6 @@
 [project]
 name = "airflow-data-quality-pipeline"
-version = "0.1.0"
+version = "1.0.0"
 description = "Backend-first retail data pipeline with Airflow DAG, quality gates, DuckDB marts, and a FastAPI results API."
 readme = "README.md"
 requires-python = ">=3.11,<3.15"
@@ -21,6 +21,7 @@ airflow = [
   "apache-airflow>=2.9,<3",
 ]
 dev = [
+  "httpx2>=2.0",
   "pytest>=8.0",
   "ruff>=0.6",
 ]

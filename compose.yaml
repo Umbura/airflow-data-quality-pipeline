@@ -1,0 +1,62 @@
+name: retail-data-pipeline
+
+services:
+  pipeline:
+    build:
+      context: .
+      target: runtime
+    command: ["retail-pipeline"]
+    environment:
+      RETAIL_PIPELINE_RAW_DIR: /app/data/raw
+      RETAIL_PIPELINE_PROCESSED_DIR: /app/data/processed
+      RETAIL_PIPELINE_REPORTS_DIR: /app/reports
+    volumes:
+      - ./data/raw:/app/data/raw:ro
+      - ./data/processed:/app/data/processed
+      - ./reports:/app/reports
+
+  api:
+    build:
+      context: .
+      target: runtime
+    command: ["retail-api"]
+    depends_on:
+      pipeline:
+        condition: service_completed_successfully
+    environment:
+      RETAIL_PIPELINE_PROCESSED_DIR: /app/data/processed
+      RETAIL_PIPELINE_REPORTS_DIR: /app/reports
+      RETAIL_API_HOST: 0.0.0.0
+      RETAIL_API_PORT: 8000
+    ports:
+      - "${RETAIL_API_HOST_PORT:-8000}:8000"
+    volumes:
+      - ./data/processed:/app/data/processed:ro
+      - ./reports:/app/reports:ro
+
+  airflow:
+    profiles: ["airflow"]
+    build:
+      context: .
+      target: airflow
+    command: ["airflow", "standalone"]
+    environment:
+      AIRFLOW_HOME: /app/airflow_home
+      AIRFLOW__CORE__DAGS_FOLDER: /app/dags
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__METRICS__TIMER_UNIT_CONSISTENCY: "true"
+      RETAIL_PIPELINE_RAW_DIR: /app/data/raw
+      RETAIL_PIPELINE_PROCESSED_DIR: /app/data/processed
+      RETAIL_PIPELINE_REPORTS_DIR: /app/reports
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./dags:/app/dags:ro
+      - ./data/raw:/app/data/raw:ro
+      - ./data/processed:/app/data/processed
+      - ./reports:/app/reports
+      - airflow_home:/app/airflow_home
+
+volumes:
+  airflow_home:

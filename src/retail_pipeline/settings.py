@@ -19,3 +19,11 @@ def processed_dir() -> Path:
 
 def reports_dir() -> Path:
     return Path(os.getenv("RETAIL_PIPELINE_REPORTS_DIR", DEFAULT_REPORTS_DIR)).resolve()
+
+
+def api_host() -> str:
+    return os.getenv("RETAIL_API_HOST", "127.0.0.1")
+
+
+def api_port() -> int:
+    return int(os.getenv("RETAIL_API_PORT", "8000"))
