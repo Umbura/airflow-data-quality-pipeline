@@ -68,11 +68,11 @@ The Airflow grid records successful execution of `validate_quality`, `build_anal
 
 The generated OpenAPI interface documents health, metrics, quality, mart discovery, and paginated mart endpoints.
 
-### Quality Gate Response
+### Full Dataset Run
 
-![Successful quality report returned by the API with 25 passed checks](docs/images/api-quality-report.png)
+![Successful API metrics response for the complete UCI Online Retail dataset](docs/images/api-full-dataset-run.png)
 
-The quality endpoint returns the persisted report with 25 passed checks, no failures, and HTTP status 200.
+The metrics endpoint records 4,371 customers, 22,186 orders, 406,789 order items, 25 passed quality checks, and no failed stage.
 
 ## Dataset
 
