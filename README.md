@@ -52,6 +52,28 @@ UCI Online Retail CSV
 
 The component model and failure semantics are documented in [docs/architecture.md](docs/architecture.md).
 
+## Runtime Evidence
+
+The following screenshots were captured from the local Docker runtime after successful pipeline execution.
+
+### Airflow Orchestration
+
+![Airflow grid showing two successful DAG runs and three successful tasks](docs/images/airflow-dag-success.png)
+
+The Airflow grid records successful execution of `validate_quality`, `build_analytics`, and `publish_results`.
+
+### API Contract
+
+![OpenAPI documentation for the retail data quality pipeline API](docs/images/api-openapi.png)
+
+The generated OpenAPI interface documents health, metrics, quality, mart discovery, and paginated mart endpoints.
+
+### Quality Gate Response
+
+![Successful quality report returned by the API with 25 passed checks](docs/images/api-quality-report.png)
+
+The quality endpoint returns the persisted report with 25 passed checks, no failures, and HTTP status 200.
+
 ## Dataset
 
 The committed sample is derived from the UCI Machine Learning Repository Online Retail dataset.
