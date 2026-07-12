@@ -1,9 +1,9 @@
 {
-  "run_id": "20260712T201300134773Z",
+  "run_id": "20260712T205650618193Z",
   "status": "success",
-  "started_at": "2026-07-12T20:13:00.134Z",
-  "finished_at": "2026-07-12T20:13:00.790Z",
-  "duration_seconds": 0.657,
+  "started_at": "2026-07-12T20:56:50.618Z",
+  "finished_at": "2026-07-12T20:56:51.180Z",
+  "duration_seconds": 0.562,
   "failed_stage": null,
   "raw_rows": {
     "customers": 1039,
@@ -11,8 +11,8 @@
     "order_items": 32114
   },
   "quality": {
-    "total_checks": 22,
-    "passed_checks": 22,
+    "total_checks": 25,
+    "passed_checks": 25,
     "failed_checks": 0
   },
   "marts": {

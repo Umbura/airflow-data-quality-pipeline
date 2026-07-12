@@ -9,6 +9,10 @@ DEFAULT_PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 DEFAULT_REPORTS_DIR = PROJECT_ROOT / "reports"
 
 
+class ConfigurationError(ValueError):
+    """Raised when an environment-based setting is invalid."""
+
+
 def raw_dir() -> Path:
     return Path(os.getenv("RETAIL_PIPELINE_RAW_DIR", DEFAULT_RAW_DIR)).resolve()
 
@@ -26,4 +30,11 @@ def api_host() -> str:
 
 
 def api_port() -> int:
-    return int(os.getenv("RETAIL_API_PORT", "8000"))
+    raw_port = os.getenv("RETAIL_API_PORT", "8000")
+    try:
+        port = int(raw_port)
+    except ValueError as error:
+        raise ConfigurationError(f"RETAIL_API_PORT must be an integer: {raw_port}") from error
+    if not 1 <= port <= 65_535:
+        raise ConfigurationError(f"RETAIL_API_PORT must be between 1 and 65535: {port}")
+    return port

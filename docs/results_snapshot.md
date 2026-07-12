@@ -19,8 +19,8 @@ Main drop reason: missing `CustomerID`, with 17,881 occurrences before overlappi
 
 | Metric | Value |
 | --- | ---: |
-| Total checks | 22 |
-| Passed checks | 22 |
+| Total checks | 25 |
+| Passed checks | 25 |
 | Failed checks | 0 |
 
 ## Top Countries By Revenue

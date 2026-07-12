@@ -1,5 +1,5 @@
 {
-  "validated_at": "2026-07-12T20:13:00Z",
+  "validated_at": "2026-07-12T20:56:51Z",
   "airflow_version": "2.11.2",
   "python_version": "3.12",
   "dag_id": "retail_data_quality_pipeline",
@@ -16,8 +16,8 @@
     "order_items": 32114
   },
   "quality": {
-    "total_checks": 22,
-    "passed_checks": 22,
+    "total_checks": 25,
+    "passed_checks": 25,
     "failed_checks": 0
   },
   "analytical_marts": 4

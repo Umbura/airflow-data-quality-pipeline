@@ -4,11 +4,14 @@
   "normalized_rows": 32114,
   "dropped_rows": 17886,
   "drop_reasons_before_overlap": {
-    "missing_customer_id": 17881,
-    "missing_description": 142,
+    "missing_or_blank_order_id": 0,
+    "missing_or_blank_product_id": 0,
+    "missing_or_blank_customer_id": 17881,
+    "missing_or_blank_description": 142,
+    "missing_or_blank_country": 0,
     "invalid_order_date": 0,
-    "non_positive_or_missing_unit_price": 297,
-    "zero_or_missing_quantity": 0
+    "invalid_unit_price": 297,
+    "invalid_quantity": 0
   },
   "output_rows": {
     "customers": 1039,

@@ -12,8 +12,9 @@ Install and validate:
 
 ```bash
 uv sync --frozen --extra dev
-uv run pytest -q
+uv run ruff format --check .
 uv run ruff check .
+uv run pytest -q --cov --cov-report=term-missing
 uv run retail-pipeline
 ```
 
@@ -24,6 +25,8 @@ uv run retail-api
 ```
 
 API documentation is available at `http://127.0.0.1:8000/docs`.
+
+Command-line logging defaults to `INFO`. Set `RETAIL_LOG_LEVEL` to `DEBUG`, `WARNING`, `ERROR`, or `CRITICAL` when another level is required.
 
 ## Docker Runtime
 
@@ -91,11 +94,10 @@ For missing source files, prepare the sample again:
 uv run retail-prepare-uci --max-rows 50000
 ```
 
-For a clean Airflow metadata database, stop the services and remove only the named Airflow volume:
+For a clean Airflow metadata database, stop the services and remove the Compose-managed volumes:
 
 ```bash
-docker compose --profile airflow down
-docker volume rm retail-data-pipeline_airflow_home
+docker compose --profile airflow down --volumes
 ```
 
 This operation removes Airflow metadata and local credentials. It does not remove the project data directories.

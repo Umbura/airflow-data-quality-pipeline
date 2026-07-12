@@ -5,10 +5,12 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
+from retail_pipeline.logging_config import configure_logging
 from retail_pipeline.pipeline import run_pipeline
 
 
 def main() -> None:
+    configure_logging()
     parser = argparse.ArgumentParser(description="Run the retail data pipeline locally.")
     parser.add_argument("--raw-dir", type=Path, default=None)
     parser.add_argument("--processed-dir", type=Path, default=None)

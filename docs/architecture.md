@@ -23,7 +23,7 @@ flowchart LR
 | Component | Responsibility |
 | --- | --- |
 | Dataset preparation | Downloads the source sample and normalizes customers, orders, and order items. |
-| Quality stage | Evaluates schema, completeness, uniqueness, domain, numeric, date, and referential constraints. |
+| Quality stage | Evaluates schema, completeness, non-blank fields, uniqueness, domains, finite numeric values, dates, and referential constraints. |
 | Warehouse stage | Builds the DuckDB fact table and four analytical marts. |
 | Publication stage | Writes a portable run summary with timing, outputs, and failure context. |
 | Airflow DAG | Orchestrates quality, warehouse, and publication as separate tasks. |
@@ -34,6 +34,8 @@ flowchart LR
 Critical quality failures stop transformation before the warehouse is modified. Quality and run reports are still written so the failure can be diagnosed outside the process.
 
 Warehouse and CSV outputs use temporary files followed by atomic replacement. A failed write does not intentionally expose a partially generated artifact. Airflow limits the DAG to one active run because the local storage target is shared.
+
+Each stage emits standard Python logs. Command-line logging defaults to `INFO` and can be adjusted through `RETAIL_LOG_LEVEL`.
 
 ## Storage Model
 

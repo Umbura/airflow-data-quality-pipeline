@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 from pathlib import Path
 from uuid import uuid4
 
@@ -14,11 +13,12 @@ def build_warehouse(frames: dict[str, pd.DataFrame], db_path: Path) -> dict[str,
 
     try:
         with duckdb.connect(str(temporary_path)) as con:
-            for table_name, frame in frames.items():
-                con.register(f"{table_name}_df", frame)
-                con.execute(
-                    f"CREATE OR REPLACE TABLE raw_{table_name} AS SELECT * FROM {table_name}_df"
-                )
+            con.register("customers_df", frames["customers"])
+            con.register("orders_df", frames["orders"])
+            con.register("order_items_df", frames["order_items"])
+            con.execute("CREATE OR REPLACE TABLE raw_customers AS SELECT * FROM customers_df")
+            con.execute("CREATE OR REPLACE TABLE raw_orders AS SELECT * FROM orders_df")
+            con.execute("CREATE OR REPLACE TABLE raw_order_items AS SELECT * FROM order_items_df")
 
             con.execute(
                 """
@@ -109,7 +109,7 @@ def build_warehouse(frames: dict[str, pd.DataFrame], db_path: Path) -> dict[str,
                 """
             ).df()
 
-        os.replace(temporary_path, db_path)
+        temporary_path.replace(db_path)
     finally:
         temporary_path.unlink(missing_ok=True)
 

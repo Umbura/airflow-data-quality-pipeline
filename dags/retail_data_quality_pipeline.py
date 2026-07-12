@@ -32,16 +32,22 @@ if dag and task:
         def build_analytics(_validation: dict) -> dict:
             from contextlib import suppress
 
-            from retail_pipeline.pipeline import publish_failure_summary, run_warehouse_stage
+            from retail_pipeline.pipeline import (
+                PipelineFailure,
+                publish_failure_summary,
+                run_warehouse_stage,
+            )
 
             try:
                 return run_warehouse_stage()
             except Exception as error:
                 with suppress(OSError):
                     publish_failure_summary(
-                        error,
-                        "warehouse",
-                        validation=_validation,
+                        PipelineFailure(
+                            error=error,
+                            stage="warehouse",
+                            validation=_validation,
+                        )
                     )
                 raise
 
@@ -50,17 +56,23 @@ if dag and task:
             from contextlib import suppress
             from dataclasses import asdict
 
-            from retail_pipeline.pipeline import publish_failure_summary, publish_success_summary
+            from retail_pipeline.pipeline import (
+                PipelineFailure,
+                publish_failure_summary,
+                publish_success_summary,
+            )
 
             try:
                 return asdict(publish_success_summary(validation, warehouse))
             except Exception as error:
                 with suppress(OSError):
                     publish_failure_summary(
-                        error,
-                        "publish_summary",
-                        validation=validation,
-                        warehouse=warehouse,
+                        PipelineFailure(
+                            error=error,
+                            stage="publish_summary",
+                            validation=validation,
+                            warehouse=warehouse,
+                        )
                     )
                 raise
 

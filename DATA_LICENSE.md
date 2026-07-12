@@ -16,4 +16,4 @@ Chen, D. (2015). Online Retail [Dataset]. UCI Machine Learning Repository.
 https://doi.org/10.24432/C5BW33
 ```
 
-The raw Excel file is not committed to this repository. Use `uv run retail-prepare-uci` to download the source file and regenerate the normalized sample files under `data/raw/`.
+The upstream dataset file is not committed to this repository. A normalized 50,000-row sample is committed under `data/raw/` for reproducible local validation. Use `uv run retail-prepare-uci` to read the documented CSV mirror and regenerate those sample files.

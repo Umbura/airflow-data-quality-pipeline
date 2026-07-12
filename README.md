@@ -4,7 +4,7 @@
 
 Backend data pipeline for retail transaction ingestion, quality validation, analytical mart generation, orchestration, and read-only result serving.
 
-Version 1.0.0 provides a complete local backend path. It prepares a real public dataset, blocks invalid inputs, builds a DuckDB warehouse, publishes portable artifacts, exposes results through FastAPI, and orchestrates the stages with Airflow.
+Version 1.0.0 provides an end-to-end local backend path. It prepares a real public dataset, blocks invalid inputs, builds a DuckDB warehouse, publishes portable artifacts, exposes results through FastAPI, and orchestrates the stages with Airflow.
 
 ## Overview
 
@@ -16,15 +16,16 @@ The default path uses local files and requires no paid services, cloud account, 
 
 - Reproducible preparation of a UCI Online Retail sample.
 - Normalized customer, order, and order-item raw tables.
-- Twenty-two critical schema and data quality checks.
+- Twenty-five critical schema and data quality checks.
 - Failure reports written before transformation is blocked.
 - Atomic DuckDB and CSV artifact publication.
 - Revenue marts with paid and canceled orders separated.
 - Three-task Airflow DAG with retry and concurrency controls.
 - FastAPI service with readiness status and paginated marts.
 - Docker services for pipeline, API, and optional Airflow runtime.
-- GitHub Actions validation for lint, tests, compilation, and a pipeline smoke run.
-- Eleven automated tests covering quality, pipeline, warehouse, and API behavior.
+- Stage-level logs with configurable severity.
+- GitHub Actions validation for formatting, lint, coverage, compilation, Compose, and a pipeline smoke run.
+- Twenty-six automated tests with 94% statement and branch coverage.
 
 ## Execution Flow
 
@@ -68,9 +69,10 @@ Validation covers:
 
 - required tables and columns;
 - non-empty tables and non-null fields;
+- non-blank identifiers and descriptive fields;
 - unique customer and order keys;
 - accepted status and segment domains;
-- positive numeric values;
+- positive and finite numeric values;
 - parseable invoice and order dates;
 - order-to-customer referential integrity;
 - order-item-to-order referential integrity.
@@ -88,8 +90,9 @@ uv sync --frozen --extra dev
 Run validation and the pipeline:
 
 ```bash
+uv run ruff format --check .
 uv run ruff check .
-uv run pytest -q
+uv run pytest -q --cov --cov-report=term-missing
 uv run retail-pipeline
 ```
 
@@ -100,6 +103,8 @@ uv run retail-prepare-uci --max-rows 50000
 ```
 
 Use `--max-rows 0` to process the full mirrored CSV.
+
+Set `RETAIL_LOG_LEVEL` to `DEBUG`, `INFO`, `WARNING`, `ERROR`, or `CRITICAL` to control command-line pipeline logs.
 
 ## Docker
 
@@ -164,10 +169,11 @@ The committed artifacts were generated from the first 50,000 source rows.
 | Orders | 1,979 |
 | Paid orders | 1,617 |
 | Canceled orders | 362 |
-| Data quality checks | 22 |
+| Data quality checks | 25 |
 | Failed quality checks | 0 |
 | Analytical marts | 4 |
-| Automated tests | 11 passed |
+| Automated tests | 26 passed |
+| Test coverage | 94% |
 
 The generated ranking tables are summarized in [docs/results_snapshot.md](docs/results_snapshot.md).
 
@@ -176,8 +182,10 @@ The generated ranking tables are summarized in [docs/results_snapshot.md](docs/r
 | Validation | Result |
 | --- | --- |
 | Local pipeline | passed |
-| Quality gate | 22 of 22 checks passed |
-| Automated tests | 11 passed |
+| Quality gate | 25 of 25 checks passed |
+| Automated tests | 26 passed |
+| Test coverage | 94% |
+| Ruff format | passed |
 | Ruff lint | passed |
 | Python compilation | passed |
 | Docker runtime build | passed |

@@ -33,4 +33,4 @@ The DAG was imported without errors and the test run finished with status `succe
 | `build_analytics` | success |
 | `publish_results` | success |
 
-The validated run processed 1,039 customers, 1,979 orders, and 32,114 order items. All 22 quality checks passed and four analytical marts were published.
+The validated run processed 1,039 customers, 1,979 orders, and 32,114 order items. All 25 quality checks passed and four analytical marts were published.
