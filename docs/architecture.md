@@ -2,7 +2,7 @@
 
 ## System Boundary
 
-The project implements a local analytical data platform for a normalized sample of the UCI Online Retail dataset. The boundary includes source preparation, raw data validation, warehouse transformation, analytical marts, orchestration, and read-only result access.
+The project implements a local analytical data platform for the normalized UCI Online Retail dataset. The boundary includes source preparation, raw data validation, warehouse transformation, analytical marts, orchestration, and read-only result access.
 
 ```mermaid
 flowchart LR
@@ -22,7 +22,7 @@ flowchart LR
 
 | Component | Responsibility |
 | --- | --- |
-| Dataset preparation | Downloads the source sample and normalizes customers, orders, and order items. |
+| Dataset preparation | Downloads the configured source scope and normalizes customers, orders, and order items. |
 | Quality stage | Evaluates schema, completeness, non-blank fields, uniqueness, domains, finite numeric values, dates, and referential constraints. |
 | Warehouse stage | Builds the DuckDB fact table and four analytical marts. |
 | Publication stage | Writes a portable run summary with timing, outputs, and failure context. |

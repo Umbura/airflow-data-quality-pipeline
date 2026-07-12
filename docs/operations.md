@@ -8,6 +8,14 @@ Requirements:
 - uv;
 - network access only when the source dataset is prepared again.
 
+Create the local environment file:
+
+```bash
+cp .env.example .env
+```
+
+The application loads only `RETAIL_` variables from this file and preserves values already exported by the operating system. Set `RETAIL_DATASET_MAX_ROWS=0` to process the complete source.
+
 Install and validate:
 
 ```bash
@@ -88,10 +96,10 @@ docker compose --profile airflow run --rm airflow airflow dags test retail_data_
 
 For a quality failure, inspect `quality_report.json` and correct the raw input before rerunning. The run summary identifies the failed stage and exception type.
 
-For missing source files, prepare the sample again:
+For missing source files, prepare the configured dataset scope again:
 
 ```bash
-uv run retail-prepare-uci --max-rows 50000
+uv run retail-prepare-uci
 ```
 
 For a clean Airflow metadata database, stop the services and remove the Compose-managed volumes:

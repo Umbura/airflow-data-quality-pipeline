@@ -124,6 +124,16 @@ def test_normalize_transactions_reports_missing_source_columns() -> None:
     assert "UnitPrice" in error.value.missing_columns
 
 
+def test_normalize_transactions_preserves_positive_sub_cent_prices() -> None:
+    source = _source_frame().iloc[[0]].copy()
+    source.loc[:, "UnitPrice"] = 0.001
+
+    frames, report = _normalize_transactions(source)
+
+    assert report["normalized_rows"] == 1
+    assert frames["order_items"].iloc[0]["unit_price"] == pytest.approx(0.001)
+
+
 def test_prepare_uci_sample_writes_normalized_outputs(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -141,6 +151,7 @@ def test_prepare_uci_sample_writes_normalized_outputs(
 
     report = prepare_uci_sample(
         max_rows=2,
+        source_url=CSV_MIRROR_URL,
         raw_output_dir=raw_dir,
         report_output_dir=reports_dir,
     )
@@ -158,3 +169,28 @@ def test_prepare_uci_sample_writes_normalized_outputs(
 def test_prepare_uci_sample_rejects_negative_row_limit() -> None:
     with pytest.raises(ValueError, match="max_rows"):
         prepare_uci_sample(max_rows=-1)
+
+
+def test_prepare_uci_sample_uses_environment_dataset_configuration(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    source = _source_frame()
+    calls: list[tuple[str, int | None]] = []
+
+    def fake_read_csv(url: str, *, nrows: int | None = None) -> pd.DataFrame:
+        calls.append((url, nrows))
+        return source.copy()
+
+    monkeypatch.setenv("RETAIL_DATASET_CSV_URL", "https://data.example/retail.csv")
+    monkeypatch.setenv("RETAIL_DATASET_MAX_ROWS", "0")
+    monkeypatch.setattr(dataset_module.pd, "read_csv", fake_read_csv)
+
+    report = prepare_uci_sample(
+        raw_output_dir=tmp_path / "raw",
+        report_output_dir=tmp_path / "reports",
+    )
+
+    assert calls == [("https://data.example/retail.csv", None)]
+    assert report["rows_requested"] == "all"
+    assert report["dataset_scope"] == "full"

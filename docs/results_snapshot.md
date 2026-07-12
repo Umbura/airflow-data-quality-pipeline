@@ -1,19 +1,19 @@
 # Results Snapshot
 
-Generated from a 50,000-row sample of the UCI Online Retail dataset.
+Generated from the complete UCI Online Retail CSV mirror.
 
 ## Dataset Preparation
 
 | Metric | Value |
 | --- | ---: |
-| Source rows read | 50,000 |
-| Normalized transaction rows | 32,114 |
-| Dropped rows | 17,886 |
-| Customers | 1,039 |
-| Orders | 1,979 |
-| Order items | 32,114 |
+| Source rows read | 541,909 |
+| Normalized transaction rows | 406,789 |
+| Dropped rows | 135,120 |
+| Customers | 4,371 |
+| Orders | 22,186 |
+| Order items | 406,789 |
 
-Main drop reason: missing `CustomerID`, with 17,881 occurrences before overlapping filters.
+Main drop reason: missing `CustomerID`, with 135,080 occurrences before overlapping filters.
 
 ## Quality Gate
 
@@ -27,27 +27,27 @@ Main drop reason: missing `CustomerID`, with 17,881 occurrences before overlappi
 
 | Country | Segment | Customers | Total orders | Paid | Canceled | Gross revenue |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| United Kingdom | domestic | 950 | 1,813 | 1,492 | 321 | 594,869.96 |
-| Germany | export | 24 | 50 | 34 | 16 | 19,217.27 |
-| France | export | 19 | 34 | 28 | 6 | 12,985.60 |
-| EIRE | export | 3 | 20 | 15 | 5 | 8,813.88 |
-| Netherlands | export | 2 | 3 | 3 | 0 | 8,784.48 |
-| Australia | export | 4 | 6 | 5 | 1 | 8,187.23 |
-| Japan | export | 3 | 4 | 3 | 1 | 7,705.07 |
-| Sweden | export | 2 | 5 | 3 | 2 | 4,381.86 |
+| United Kingdom | domestic | 3,949 | 19,854 | 16,646 | 3,208 | 7,308,391.55 |
+| Netherlands | export | 9 | 100 | 94 | 6 | 285,446.34 |
+| EIRE | export | 3 | 319 | 260 | 59 | 265,545.90 |
+| Germany | export | 95 | 603 | 457 | 146 | 228,867.14 |
+| France | export | 87 | 458 | 389 | 69 | 209,024.05 |
+| Australia | export | 9 | 72 | 60 | 12 | 139,911.45 |
+| Spain | export | 29 | 100 | 85 | 15 | 60,372.85 |
+| Switzerland | export | 20 | 73 | 52 | 21 | 56,419.29 |
 
 ## Top Products By Revenue
 
 | Product ID | Description | Units sold | Units canceled | Gross revenue |
 | --- | --- | ---: | ---: | ---: |
-| 22423 | REGENCY CAKESTAND 3 TIER | 1,807 | 98 | 20,432.85 |
-| 85123A | WHITE HANGING HEART T-LIGHT HOLDER | 4,577 | 530 | 12,159.75 |
-| 79321 | CHILLI LIGHTS | 2,402 | 73 | 10,071.34 |
-| 82484 | WOOD BLACK BOARD ANT WHITE FINISH | 1,396 | 2 | 7,046.28 |
-| 21623 | VINTAGE UNION JACK MEMOBOARD | 1,063 | 0 | 6,978.29 |
-| 21137 | BLACK RECORD COVER FRAME | 2,015 | 0 | 6,852.09 |
-| 85099B | JUMBO BAG RED RETROSPOT | 3,426 | 126 | 5,930.70 |
-| 22189 | CREAM HEART CARD HOLDER | 2,306 | 0 | 5,741.98 |
+| 23843 | PAPER CRAFT, LITTLE BIRDIE | 80,995 | 80,995 | 168,469.60 |
+| 22423 | REGENCY CAKESTAND 3 TIER | 12,402 | 857 | 142,592.95 |
+| 85123A | WHITE HANGING HEART T-LIGHT HOLDER | 36,725 | 2,578 | 100,448.15 |
+| 85099B | JUMBO BAG RED RETROSPOT | 46,181 | 1,115 | 85,220.78 |
+| 23166 | MEDIUM CERAMIC TOP STORAGE JAR | 77,916 | 74,494 | 81,416.73 |
+| POST | POSTAGE | 3,120 | 118 | 77,803.96 |
+| 47566 | PARTY BUNTING | 15,291 | 268 | 68,844.33 |
+| 84879 | ASSORTED COLOUR BIRD ORNAMENT | 35,362 | 48 | 56,580.34 |
 
 ## Generated Files
 

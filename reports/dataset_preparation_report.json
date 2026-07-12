@@ -1,24 +1,25 @@
 {
   "source": "UCI Online Retail",
-  "source_rows": 50000,
-  "normalized_rows": 32114,
-  "dropped_rows": 17886,
+  "source_rows": 541909,
+  "normalized_rows": 406789,
+  "dropped_rows": 135120,
   "drop_reasons_before_overlap": {
     "missing_or_blank_order_id": 0,
     "missing_or_blank_product_id": 0,
-    "missing_or_blank_customer_id": 17881,
-    "missing_or_blank_description": 142,
+    "missing_or_blank_customer_id": 135080,
+    "missing_or_blank_description": 1454,
     "missing_or_blank_country": 0,
     "invalid_order_date": 0,
-    "invalid_unit_price": 297,
+    "invalid_unit_price": 2517,
     "invalid_quantity": 0
   },
   "output_rows": {
-    "customers": 1039,
-    "orders": 1979,
-    "order_items": 32114
+    "customers": 4371,
+    "orders": 22186,
+    "order_items": 406789
   },
-  "sample_rows_requested": 50000,
+  "rows_requested": "all",
+  "dataset_scope": "full",
   "source_url": "https://archive.ics.uci.edu/dataset/352/online%2Bretail",
   "csv_mirror_url": "https://raw.githubusercontent.com/databricks/Spark-The-Definitive-Guide/master/data/retail-data/all/online-retail-dataset.csv",
   "license": "CC BY 4.0",

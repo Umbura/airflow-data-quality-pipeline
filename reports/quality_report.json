@@ -29,7 +29,7 @@
       "severity": "critical",
       "failed_rows": 0,
       "details": {
-        "rows": 1039
+        "rows": 4371
       }
     },
     {
@@ -56,7 +56,7 @@
       "severity": "critical",
       "failed_rows": 0,
       "details": {
-        "rows": 1979
+        "rows": 22186
       }
     },
     {
@@ -83,7 +83,7 @@
       "severity": "critical",
       "failed_rows": 0,
       "details": {
-        "rows": 32114
+        "rows": 406789
       }
     },
     {
@@ -274,11 +274,11 @@
       }
     }
   ],
-  "run_id": "20260712T210820224279Z",
-  "generated_at": "2026-07-12T21:08:20.320Z",
+  "run_id": "20260712T232740725119Z",
+  "generated_at": "2026-07-12T23:27:41.641Z",
   "raw_rows": {
-    "customers": 1039,
-    "orders": 1979,
-    "order_items": 32114
+    "customers": 4371,
+    "orders": 22186,
+    "order_items": 406789
   }
 }

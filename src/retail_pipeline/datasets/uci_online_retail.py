@@ -10,15 +10,18 @@ import pandas as pd
 
 from retail_pipeline.io import write_csv, write_json
 from retail_pipeline.logging_config import configure_logging
-from retail_pipeline.settings import raw_dir, reports_dir
+from retail_pipeline.settings import (
+    DEFAULT_DATASET_CSV_URL,
+    dataset_csv_url,
+    dataset_max_rows,
+    raw_dir,
+    reports_dir,
+)
 
 logger = logging.getLogger(__name__)
 
 UCI_SOURCE_PAGE: Final = "https://archive.ics.uci.edu/dataset/352/online%2Bretail"
-CSV_MIRROR_URL: Final = (
-    "https://raw.githubusercontent.com/databricks/Spark-The-Definitive-Guide/"
-    "master/data/retail-data/all/online-retail-dataset.csv"
-)
+CSV_MIRROR_URL: Final = DEFAULT_DATASET_CSV_URL
 SOURCE_COLUMNS: Final = frozenset(
     {
         "InvoiceNo",
@@ -114,7 +117,6 @@ def _normalize_transactions(
         for order_id, quantity in zip(cleaned["order_id"], cleaned["quantity"], strict=True)
     ]
     cleaned["quantity"] = cleaned["quantity"].abs().astype(int)
-    cleaned["unit_price"] = cleaned["unit_price"].round(2)
     cleaned["order_date"] = cleaned["order_date"].dt.date.astype(str)
     cleaned["segment"] = cleaned["country"].map(
         lambda country: "domestic" if country == "United Kingdom" else "export"
@@ -164,17 +166,23 @@ def _normalize_transactions(
 
 
 def prepare_uci_sample(
-    max_rows: int = 50_000,
+    max_rows: int | None = None,
     *,
+    source_url: str | None = None,
     raw_output_dir: Path | None = None,
     report_output_dir: Path | None = None,
 ) -> dict[str, Any]:
+    max_rows = dataset_max_rows() if max_rows is None else max_rows
     if max_rows < 0:
         raise ValueError("max_rows must be zero or a positive integer")
 
+    source_url = source_url or dataset_csv_url()
     rows_to_read = None if max_rows == 0 else max_rows
-    logger.info("Downloading UCI Online Retail data", extra={"max_rows": rows_to_read})
-    frame = pd.read_csv(CSV_MIRROR_URL, nrows=rows_to_read)
+    logger.info(
+        "Downloading UCI Online Retail data",
+        extra={"max_rows": rows_to_read, "source_url": source_url},
+    )
+    frame = pd.read_csv(source_url, nrows=rows_to_read)
     frames, report = _normalize_transactions(frame)
 
     output_dir = raw_output_dir or raw_dir()
@@ -183,9 +191,10 @@ def prepare_uci_sample(
 
     report.update(
         {
-            "sample_rows_requested": rows_to_read if rows_to_read is not None else "all",
+            "rows_requested": rows_to_read if rows_to_read is not None else "all",
+            "dataset_scope": "full" if rows_to_read is None else "sample",
             "source_url": UCI_SOURCE_PAGE,
-            "csv_mirror_url": CSV_MIRROR_URL,
+            "csv_mirror_url": source_url,
             "license": "CC BY 4.0",
             "citation": (
                 "Chen, D. (2015). Online Retail [Dataset]. "
@@ -205,15 +214,18 @@ def prepare_uci_sample(
 
 def main() -> None:
     configure_logging()
-    parser = argparse.ArgumentParser(description="Download and prepare a UCI Online Retail sample.")
+    parser = argparse.ArgumentParser(description="Download and prepare UCI Online Retail data.")
     parser.add_argument(
         "--max-rows",
         type=int,
-        default=50_000,
-        help="Rows to read from the source CSV. Use 0 for the full dataset.",
+        default=None,
+        help=(
+            "Rows to read from the source CSV. Use 0 for the full dataset. "
+            "Defaults to RETAIL_DATASET_MAX_ROWS."
+        ),
     )
     args = parser.parse_args()
-    if args.max_rows < 0:
+    if args.max_rows is not None and args.max_rows < 0:
         parser.error("--max-rows must be zero or a positive integer")
     report = prepare_uci_sample(max_rows=args.max_rows)
     print(json.dumps(report, indent=2, ensure_ascii=False))

@@ -12,6 +12,27 @@ RAW_FILES: Final = {
     "orders": "orders.csv",
     "order_items": "order_items.csv",
 }
+RAW_DTYPES: Final = {
+    "customers": {
+        "customer_id": "string",
+        "country": "string",
+        "segment": "string",
+        "first_invoice_date": "string",
+    },
+    "orders": {
+        "order_id": "string",
+        "customer_id": "string",
+        "order_date": "string",
+        "status": "string",
+    },
+    "order_items": {
+        "order_id": "string",
+        "product_id": "string",
+        "description": "string",
+        "quantity": "Int64",
+        "unit_price": "Float64",
+    },
+}
 
 
 class RawInputNotFoundError(FileNotFoundError):
@@ -26,7 +47,7 @@ def load_raw_frames(raw_dir: Path) -> dict[str, pd.DataFrame]:
         path = raw_dir / filename
         if not path.exists():
             raise RawInputNotFoundError(path)
-        frames[name] = pd.read_csv(path)
+        frames[name] = pd.read_csv(path, dtype=RAW_DTYPES[name])
     return frames
 
 

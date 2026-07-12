@@ -14,7 +14,7 @@ The default path uses local files and requires no paid services, cloud account, 
 
 ## Implemented Scope
 
-- Reproducible preparation of a UCI Online Retail sample.
+- Reproducible preparation of the complete UCI Online Retail dataset.
 - Normalized customer, order, and order-item raw tables.
 - Twenty-five critical schema and data quality checks.
 - Failure reports written before transformation is blocked.
@@ -25,7 +25,7 @@ The default path uses local files and requires no paid services, cloud account, 
 - Docker services for pipeline, API, and optional Airflow runtime.
 - Stage-level logs with configurable severity.
 - GitHub Actions validation for formatting, lint, coverage, compilation, Compose, and a pipeline smoke run.
-- Twenty-six automated tests with 94% statement and branch coverage.
+- Thirty-five automated tests with 94% statement and branch coverage.
 
 ## Execution Flow
 
@@ -76,7 +76,7 @@ The quality endpoint returns the persisted report with 25 passed checks, no fail
 
 ## Dataset
 
-The committed sample is derived from the UCI Machine Learning Repository Online Retail dataset.
+The committed normalized tables are derived from the complete UCI Machine Learning Repository Online Retail dataset.
 
 - Source: https://archive.ics.uci.edu/dataset/352/online%2Bretail
 - Citation: `Chen, D. (2015). Online Retail [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33`
@@ -103,11 +103,14 @@ A critical failure writes `quality_report.json` and a failed `run_summary.json`,
 
 ## Local Execution
 
-Install dependencies:
+Create the local configuration and install dependencies:
 
 ```bash
+cp .env.example .env
 uv sync --frozen --extra dev
 ```
+
+Only variables prefixed with `RETAIL_` are loaded from `.env`. Already exported environment variables take precedence. `RETAIL_DATASET_MAX_ROWS=0` configures complete source ingestion.
 
 Run validation and the pipeline:
 
@@ -118,13 +121,13 @@ uv run pytest -q --cov --cov-report=term-missing
 uv run retail-pipeline
 ```
 
-Prepare the sample again when required:
+Prepare the dataset again when required:
 
 ```bash
-uv run retail-prepare-uci --max-rows 50000
+uv run retail-prepare-uci
 ```
 
-Use `--max-rows 0` to process the full mirrored CSV.
+The source URL and row limit come from `RETAIL_DATASET_CSV_URL` and `RETAIL_DATASET_MAX_ROWS`. The `--max-rows` option can override the configured limit for an individual execution.
 
 Set `RETAIL_LOG_LEVEL` to `DEBUG`, `INFO`, `WARNING`, `ERROR`, or `CRITICAL` to control command-line pipeline logs.
 
@@ -181,20 +184,20 @@ The DAG runs daily, retries a failed task once, disables catchup, and allows one
 
 ## Current Results
 
-The committed artifacts were generated from the first 50,000 source rows.
+The committed artifacts were generated from all 541,909 source rows available in the documented CSV mirror.
 
 | Metric | Result |
 | --- | ---: |
-| Source rows read | 50,000 |
-| Normalized transaction rows | 32,114 |
-| Customers | 1,039 |
-| Orders | 1,979 |
-| Paid orders | 1,617 |
-| Canceled orders | 362 |
+| Source rows read | 541,909 |
+| Normalized transaction rows | 406,789 |
+| Customers | 4,371 |
+| Orders | 22,186 |
+| Paid orders | 18,532 |
+| Canceled orders | 3,654 |
 | Data quality checks | 25 |
 | Failed quality checks | 0 |
 | Analytical marts | 4 |
-| Automated tests | 26 passed |
+| Automated tests | 35 passed |
 | Test coverage | 94% |
 
 The generated ranking tables are summarized in [docs/results_snapshot.md](docs/results_snapshot.md).
@@ -205,7 +208,7 @@ The generated ranking tables are summarized in [docs/results_snapshot.md](docs/r
 | --- | --- |
 | Local pipeline | passed |
 | Quality gate | 25 of 25 checks passed |
-| Automated tests | 26 passed |
+| Automated tests | 35 passed |
 | Test coverage | 94% |
 | Ruff format | passed |
 | Ruff lint | passed |

@@ -1,24 +1,38 @@
 country,segment,customers,total_orders,paid_orders,canceled_orders,gross_revenue
-United Kingdom,domestic,950,1813,1492,321,594869.96
-Germany,export,24,50,34,16,19217.27
-France,export,19,34,28,6,12985.6
-EIRE,export,3,20,15,5,8813.88
-Netherlands,export,2,3,3,0,8784.48
-Australia,export,4,6,5,1,8187.23
-Japan,export,3,4,3,1,7705.07
-Sweden,export,2,5,3,2,4381.86
-Norway,export,1,2,2,0,3787.12
-Spain,export,6,6,5,1,2982.4
-Portugal,export,6,10,7,3,2853.65
-Cyprus,export,1,2,2,0,1868.02
-Belgium,export,4,7,5,2,1809.91
+United Kingdom,domestic,3949,19854,16646,3208,7308391.55
+Netherlands,export,9,100,94,6,285446.34
+EIRE,export,3,319,260,59,265545.9
+Germany,export,95,603,457,146,228867.14
+France,export,87,458,389,69,209024.05
+Australia,export,9,72,60,12,139911.45
+Spain,export,29,100,85,15,60372.85
+Switzerland,export,20,73,52,21,56419.29
+Belgium,export,24,119,98,21,41551.26
+Sweden,export,8,46,36,10,38378.33
+Japan,export,8,28,19,9,37416.37
+Norway,export,10,40,36,4,36165.44
+Portugal,export,19,70,57,13,33439.89
+Finland,export,12,48,41,7,22546.08
+Singapore,export,1,10,7,3,21279.29
+Channel Islands,export,9,33,26,7,20450.44
+Denmark,export,8,21,18,3,18501.92
+Italy,export,15,55,38,17,17483.24
+Cyprus,export,7,22,19,3,14242.84
+Austria,export,9,17,15,2,9483.5
+Poland,export,6,24,19,5,7334.65
+Israel,export,4,6,5,1,7221.69
+Greece,export,4,6,5,1,4760.52
+Iceland,export,1,7,7,0,4310.0
+Canada,export,4,6,6,0,3666.38
+USA,export,4,7,5,2,3580.39
+Malta,export,2,10,5,5,2725.59
+Unspecified,export,4,8,8,0,2667.07
+United Arab Emirates,export,2,3,3,0,1902.28
+Lebanon,export,1,1,1,0,1693.88
 Lithuania,export,1,4,4,0,1661.06
-Switzerland,export,2,2,2,0,1304.92
-Denmark,export,1,1,1,0,1281.5
-Finland,export,1,1,1,0,892.8
-Italy,export,4,4,2,2,811.5
-Iceland,export,1,1,1,0,711.79
-Channel Islands,export,1,1,1,0,363.53
-Poland,export,1,1,1,0,248.16
-Austria,export,1,1,0,1,0.0
-Israel,export,1,1,0,1,0.0
+European Community,export,1,5,4,1,1300.25
+Brazil,export,1,1,1,0,1143.6
+RSA,export,1,1,1,0,1002.31
+Czech Republic,export,1,5,2,3,826.74
+Bahrain,export,2,2,2,0,548.4
+Saudi Arabia,export,1,2,1,1,145.92
